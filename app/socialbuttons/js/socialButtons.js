@@ -3,40 +3,55 @@
     // это наш объект модуля (иньектор по ангуляровски
     var socialButtons = angular.module('dea', []);
 
-    // это справочник в котором хранится самый сок социальных кнопок, это шаблоны кнопок и некоторые методы
+    // это справочник в котором хранится самый сок социальных кнопок, это шаблоны кнопок и некоторые генераторы
     var socialDictionary = {
+        // vkontakte
         vk:{
-            template:'<a href="http://vk.com/share.php?url={{url}}&title={{title}}">vk</a>'
+            template: '<a href="http://vk.com/share.php?url={{url}}&title={{title}}">vk</a>'
         },
+        // facebook
         fb:{
-            template:'<a href="http://www.facebook.com/sharer.php?u={{url}}&t={{title}}">fb</a>'
+            template: '<a href="http://www.facebook.com/sharer.php?u={{url}}&t={{title}}">fb</a>'
         },
-        gp:{ //google+
-            template:'<a href="https://plus.google.com/share?hl={{language}}&url={{url}}">g+</a>'
+        //google+
+        gp:{
+            template: '<a href="https://plus.google.com/share?hl={{language}}&url={{url}}">g+</a>'
         },
-        // верхним трем ( vk, fb, gp ) дескрипшон особо то и не нужон они сами его с сайта заберут из метатегов
-        tb:{//тумблер
-            template:'<a href="http://www.tumblr.com/share/link?url={{url}}&name={{title}}&description={{description}}">tb</a>',
-            genDescription:function(descr,img){
+        // первым трем ( vk, fb, gp ) дескрипшон особо то и не нужен они сами его с сайта заберут из метатегов
+
+        // тумблер
+        tb:{
+            template: '<a ' +
+                        'href="http://www.tumblr.com/share/link?' +
+                                'url={{url}}&' +
+                                'name={{title}}&' +
+                                'description={{description}}">tb</a>',
+
+            genDescription: function(descr,img){
                 var text = '<img src="' + img + '"><br>' + descr;
                 return encodeURIComponent(text); // так надо
             }
         },
+
+        // liveJournal
         lj:{
             template:'<a href="http://www.livejournal.com/update.bml?event={{description}}&subject={{title}}">lj</a>',
             genDescription:function(descr,img,url){
                 var text = '<img src="' + img + '"><br>' + descr + ' <a href="' + url + '">'+ url +'</a>';
-                return encodeURIComponent(text); // так надо
+                return encodeURIComponent(text);
             }
         },
-        bg:{//blogger
+
+        // blogger
+        bg:{
             template:'<a href="http://www.blogger.com/blog-this.g?t={{description}}&u={{url}}&n={{title}}">bg</a>',
             genDescription:function(descr,img){
                 var text = '<img src="' + img + '"><br>' + descr;
-                return encodeURIComponent(text); // так надо
+                return encodeURIComponent(text);
             }
         },
-        tw:{//twitter
+        // twitter
+        tw:{
             template:'<a href="http://twitter.com/share?url={{url}}&text={{title}}&via=coolWidget:p">tw</a>'
         }
     };
@@ -44,12 +59,18 @@
     // директива контейнера
     socialButtons.directive('socialButtons', function() {
         return {
+
             // тип преобразования element ( фигачим прямо теги )
             restrict: 'E',
-            // все что было внутри нашего элемента надо перенести в место помеченное ng-transclude (будет чуть дальше в шаблоне)
+
+            // все что было внутри нашего элемента надо перенести в место
+            // помеченное ng-transclude (будет чуть дальше в шаблоне)
             transclude: true,
-            // создавать ли свой скоп для элемента, думаю что лишним не будет хотя в нашем случае это не важно
+
+            // создавать ли свой скоп для элемента,
+            // думаю что лишним не будет хотя в нашем случае это не важно
             scope: {},
+
             // собственно конструктор контроллера
             // первый элемент массива это название зависимости которая нам нужна для конструктора
             controller: ['$element',function($element) {
@@ -71,20 +92,23 @@
                     } else {
                         button.description = encodeURIComponent(description);
                     }
+
                     button.url          = encodeURIComponent(url);
                     button.img          = encodeURIComponent(img);
                     button.title        = encodeURIComponent(title);
                 }
             }],
             template:
-            // ng-transclude отвечает за то,
-            // чтобы при первом преобразовании тега social-buttons
-            // его дочерние элементы не потерялись, а были вставленны внутрь
+                // ng-transclude отвечает за то,
+                // чтобы при первом преобразовании тега social-buttons
+                // его дочерние элементы не потерялись, а были вставленны внутрь
+                // сгенерированной замены
                 '<div class="social-buttons-set" ng-transclude></div>',
             replace: true
         };
     });
-// функа генерить функу которая делает кнопку O_o
+
+// функция генерит функцию которая делает кнопку O_o ( вот за это я люблю js )
     var makeSocialButton = function(nm){
         // тут у нас все в общем виде
         return function(){
@@ -98,7 +122,7 @@
                     // у нас есть кнопка но она понятия не имеет какие данные нам шарить
                     // зато этими данными владеет родительский элемент (social-buttons)
                     // попросим его поделится ими
-                    // scope - это наш контроллер он же является наблюдаемым объектом
+                    // scope - это какбы "наш контроллер" он же является наблюдаемым объектом
                     // при назначении ему свойств будет оказано влияние на отображение
                     socialButtonsCtrl.setButton(scope,nm);
                 },
@@ -108,7 +132,7 @@
         };
     };
 
-    //
+    // циклом по нашему справочнику генерим кнопки и закрепляем из за одноименными тегами
     for (var nm in socialDictionary){
         if (socialDictionary.hasOwnProperty(nm)){
             socialButtons.directive(nm, makeSocialButton(nm));
