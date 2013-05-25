@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #example{
+            display: block;
+            width: 800px;
+            height: 600px;
+            margin: 60px auto;
+            border: 1px solid #b3d4fc;
+            position: relative;
+        }
+        .point{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: block;
+            width: 13px;
+            height: 13px;
+            border-radius: 19px;
+            background-color: rgba(100,100,100,0.8);
+            border: solid 13px rgba(100,100,100,0.25);
+            background-clip: content-box;
+        }
+        .pointInner{
+            display: block;
+            width: 13px;
+            height: 13px;
+            border-radius: 6px;
+            background: rgba(100,100,100,0.5);
+            position: absolute;
+            left: 13px;
+            top: 13px;
+        }
+        .point:hover{
+            background: rgba(100,100,100,0.5);
+        }
+        .point:hover .pointInner{
+            background: rgba(100,100,100,1);
+        }
+    </style>
+    <script>
+        var makeSomeBlackMagic = function(container,elClass){
+            var doNothing = function(e){ e.preventDefault(); return false;};
+            [].forEach.call(document.querySelectorAll(elClass),function(point){
+                point.addEventListener('dragend', function(event){
+                    this.style.top = (parseInt(this.offsetTop)  + event.offsetY - this.offsetHeight) +'px';
+                    this.style.left = (parseInt(this.offsetLeft)  + event.offsetX )+'px';
+                }, false);
+                point.addEventListener('dragstart', function(event){
+                }, false);
+            });
+            var contEl = document.querySelector(container)
+            contEl.addEventListener('drop',doNothing,false);
+            contEl.addEventListener('dragover',doNothing,false);
+        };
+    </script>
+
+</head>
+<body>
+    <div id="example">
+        <div class="point" draggable="true"></div>
+    </div>
+
+    <script>
+        // добавим нашим кружочкам таскабельности
+        makeSomeBlackMagic('#example','.point');
+    </script>
+</body>
+</html>

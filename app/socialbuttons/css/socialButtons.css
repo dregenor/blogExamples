@@ -1,0 +1,24 @@
+.social-buttons-set{
+    display: block;
+}
+
+.social-buttons-set a {
+    line-height: 30px;
+    text-align: center;
+    border: solid 1px #dadfe6;
+    font-family: "Verdana";
+    font-weight: bolder;
+    font-size: 20px;
+    display: inline-block;
+    width: 36px;
+    height: 30px;
+    color: #dadfe6;
+    text-decoration: none;
+
+}
+
+.social-buttons-set a:hover{
+    background: #eafaff;
+    border-color: #9ec1ee;
+    color: #aed1ff;
+}

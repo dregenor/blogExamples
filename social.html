@@ -1,0 +1,39 @@
+<!DOCTYPE html >
+<html ng-app="dea"><!-- указываем название модуля который будет запущен для этого блока ( в даннос случае весь документ )-->
+<head>
+    <title>Социальные шары йоу йоу</title>
+    <script src="./app/socialbuttons/js/angular.min.js"></script>
+    <script src="./app/socialbuttons/js/socialButtons.js"></script>
+    <link href="./app/socialbuttons/css/socialButtons.css" rel="stylesheet" type="text/css">
+    <style>
+        body{
+            font-family: Verdana;
+        }
+    </style>
+</head>
+<body>
+    <p>
+         <p>Рассказать о яндексе?</p>
+         <social-buttons
+                 url="http://www.ya.ru"
+                 img="http://yandex.st/morda-logo/i/logo.png"
+                 sb-title="Яндекс чо"
+                 description="Это яндекс познакомьтесь">
+             <vk></vk>
+             <fb></fb>
+             <gp></gp>
+             <tw></tw>
+             <lj></lj>
+             <bg></bg>
+             <tb></tb>
+         </social-buttons>
+         <!--
+         Возможно я не разобрался или это действительно так но ангуляр не любит самозакрывающиеся элементы
+         тоесть <vk/> сработает но все элементы поле него не будут обработаны и вероятно что-то сломается в последующей верстке
+          а вот <vk><vk/> будет ок.
+          -->
+
+
+    </p>
+</body>
+</html>
